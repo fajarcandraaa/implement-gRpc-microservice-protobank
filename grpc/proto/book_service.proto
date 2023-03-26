@@ -66,8 +66,6 @@ message BookStatusResponse {
 message CreateBookRequest {
     string title = 1;
     string author = 2;
-    string created_at = 3;
-    string updated_at = 4;
 }
 
 message FindBookByIdRequest {
