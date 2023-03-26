@@ -22,8 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BookServiceClient interface {
-	ServiceRegisterUser(ctx context.Context, in *CreateBookRequest, opts ...grpc.CallOption) (*BookStatusResponse, error)
-	ServiceFindUserById(ctx context.Context, in *FindBookByIdRequest, opts ...grpc.CallOption) (*BookStatusResponse, error)
+	ServiceInserNewBook(ctx context.Context, in *CreateBookRequest, opts ...grpc.CallOption) (*BookStatusResponse, error)
+	ServiceFindBookById(ctx context.Context, in *FindBookByIdRequest, opts ...grpc.CallOption) (*BookStatusResponse, error)
 }
 
 type bookServiceClient struct {
@@ -34,18 +34,18 @@ func NewBookServiceClient(cc grpc.ClientConnInterface) BookServiceClient {
 	return &bookServiceClient{cc}
 }
 
-func (c *bookServiceClient) ServiceRegisterUser(ctx context.Context, in *CreateBookRequest, opts ...grpc.CallOption) (*BookStatusResponse, error) {
+func (c *bookServiceClient) ServiceInserNewBook(ctx context.Context, in *CreateBookRequest, opts ...grpc.CallOption) (*BookStatusResponse, error) {
 	out := new(BookStatusResponse)
-	err := c.cc.Invoke(ctx, "/bookservice.BookService/ServiceRegisterUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/bookservice.BookService/ServiceInserNewBook", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *bookServiceClient) ServiceFindUserById(ctx context.Context, in *FindBookByIdRequest, opts ...grpc.CallOption) (*BookStatusResponse, error) {
+func (c *bookServiceClient) ServiceFindBookById(ctx context.Context, in *FindBookByIdRequest, opts ...grpc.CallOption) (*BookStatusResponse, error) {
 	out := new(BookStatusResponse)
-	err := c.cc.Invoke(ctx, "/bookservice.BookService/ServiceFindUserById", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/bookservice.BookService/ServiceFindBookById", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,8 +56,8 @@ func (c *bookServiceClient) ServiceFindUserById(ctx context.Context, in *FindBoo
 // All implementations must embed UnimplementedBookServiceServer
 // for forward compatibility
 type BookServiceServer interface {
-	ServiceRegisterUser(context.Context, *CreateBookRequest) (*BookStatusResponse, error)
-	ServiceFindUserById(context.Context, *FindBookByIdRequest) (*BookStatusResponse, error)
+	ServiceInserNewBook(context.Context, *CreateBookRequest) (*BookStatusResponse, error)
+	ServiceFindBookById(context.Context, *FindBookByIdRequest) (*BookStatusResponse, error)
 	mustEmbedUnimplementedBookServiceServer()
 }
 
@@ -65,11 +65,11 @@ type BookServiceServer interface {
 type UnimplementedBookServiceServer struct {
 }
 
-func (UnimplementedBookServiceServer) ServiceRegisterUser(context.Context, *CreateBookRequest) (*BookStatusResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ServiceRegisterUser not implemented")
+func (UnimplementedBookServiceServer) ServiceInserNewBook(context.Context, *CreateBookRequest) (*BookStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceInserNewBook not implemented")
 }
-func (UnimplementedBookServiceServer) ServiceFindUserById(context.Context, *FindBookByIdRequest) (*BookStatusResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ServiceFindUserById not implemented")
+func (UnimplementedBookServiceServer) ServiceFindBookById(context.Context, *FindBookByIdRequest) (*BookStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceFindBookById not implemented")
 }
 func (UnimplementedBookServiceServer) mustEmbedUnimplementedBookServiceServer() {}
 
@@ -84,38 +84,38 @@ func RegisterBookServiceServer(s grpc.ServiceRegistrar, srv BookServiceServer) {
 	s.RegisterService(&BookService_ServiceDesc, srv)
 }
 
-func _BookService_ServiceRegisterUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _BookService_ServiceInserNewBook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateBookRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BookServiceServer).ServiceRegisterUser(ctx, in)
+		return srv.(BookServiceServer).ServiceInserNewBook(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/bookservice.BookService/ServiceRegisterUser",
+		FullMethod: "/bookservice.BookService/ServiceInserNewBook",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BookServiceServer).ServiceRegisterUser(ctx, req.(*CreateBookRequest))
+		return srv.(BookServiceServer).ServiceInserNewBook(ctx, req.(*CreateBookRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BookService_ServiceFindUserById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _BookService_ServiceFindBookById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindBookByIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BookServiceServer).ServiceFindUserById(ctx, in)
+		return srv.(BookServiceServer).ServiceFindBookById(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/bookservice.BookService/ServiceFindUserById",
+		FullMethod: "/bookservice.BookService/ServiceFindBookById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BookServiceServer).ServiceFindUserById(ctx, req.(*FindBookByIdRequest))
+		return srv.(BookServiceServer).ServiceFindBookById(ctx, req.(*FindBookByIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,12 +128,12 @@ var BookService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*BookServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ServiceRegisterUser",
-			Handler:    _BookService_ServiceRegisterUser_Handler,
+			MethodName: "ServiceInserNewBook",
+			Handler:    _BookService_ServiceInserNewBook_Handler,
 		},
 		{
-			MethodName: "ServiceFindUserById",
-			Handler:    _BookService_ServiceFindUserById_Handler,
+			MethodName: "ServiceFindBookById",
+			Handler:    _BookService_ServiceFindBookById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

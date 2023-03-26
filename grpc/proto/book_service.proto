@@ -74,6 +74,6 @@ message FindBookByIdRequest {
 }
 
 service BookService {
-    rpc ServiceRegisterUser(CreateBookRequest) returns(BookStatusResponse);
-    rpc ServiceFindUserById(FindBookByIdRequest) returns (BookStatusResponse);
+    rpc ServiceInserNewBook(CreateBookRequest) returns(BookStatusResponse);
+    rpc ServiceFindBookById(FindBookByIdRequest) returns (BookStatusResponse);
 }
