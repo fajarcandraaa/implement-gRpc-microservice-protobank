@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BookServiceClient interface {
-	ServiceInserNewBook(ctx context.Context, in *CreateBookRequest, opts ...grpc.CallOption) (*BookStatusResponse, error)
+	ServiceInsertNewBook(ctx context.Context, in *CreateBookRequest, opts ...grpc.CallOption) (*BookStatusResponse, error)
 	ServiceFindBookById(ctx context.Context, in *FindBookByIdRequest, opts ...grpc.CallOption) (*BookStatusResponse, error)
 }
 
@@ -34,9 +34,9 @@ func NewBookServiceClient(cc grpc.ClientConnInterface) BookServiceClient {
 	return &bookServiceClient{cc}
 }
 
-func (c *bookServiceClient) ServiceInserNewBook(ctx context.Context, in *CreateBookRequest, opts ...grpc.CallOption) (*BookStatusResponse, error) {
+func (c *bookServiceClient) ServiceInsertNewBook(ctx context.Context, in *CreateBookRequest, opts ...grpc.CallOption) (*BookStatusResponse, error) {
 	out := new(BookStatusResponse)
-	err := c.cc.Invoke(ctx, "/bookservice.BookService/ServiceInserNewBook", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/bookservice.BookService/ServiceInsertNewBook", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *bookServiceClient) ServiceFindBookById(ctx context.Context, in *FindBoo
 // All implementations must embed UnimplementedBookServiceServer
 // for forward compatibility
 type BookServiceServer interface {
-	ServiceInserNewBook(context.Context, *CreateBookRequest) (*BookStatusResponse, error)
+	ServiceInsertNewBook(context.Context, *CreateBookRequest) (*BookStatusResponse, error)
 	ServiceFindBookById(context.Context, *FindBookByIdRequest) (*BookStatusResponse, error)
 	mustEmbedUnimplementedBookServiceServer()
 }
@@ -65,8 +65,8 @@ type BookServiceServer interface {
 type UnimplementedBookServiceServer struct {
 }
 
-func (UnimplementedBookServiceServer) ServiceInserNewBook(context.Context, *CreateBookRequest) (*BookStatusResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ServiceInserNewBook not implemented")
+func (UnimplementedBookServiceServer) ServiceInsertNewBook(context.Context, *CreateBookRequest) (*BookStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceInsertNewBook not implemented")
 }
 func (UnimplementedBookServiceServer) ServiceFindBookById(context.Context, *FindBookByIdRequest) (*BookStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ServiceFindBookById not implemented")
@@ -84,20 +84,20 @@ func RegisterBookServiceServer(s grpc.ServiceRegistrar, srv BookServiceServer) {
 	s.RegisterService(&BookService_ServiceDesc, srv)
 }
 
-func _BookService_ServiceInserNewBook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _BookService_ServiceInsertNewBook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateBookRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BookServiceServer).ServiceInserNewBook(ctx, in)
+		return srv.(BookServiceServer).ServiceInsertNewBook(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/bookservice.BookService/ServiceInserNewBook",
+		FullMethod: "/bookservice.BookService/ServiceInsertNewBook",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BookServiceServer).ServiceInserNewBook(ctx, req.(*CreateBookRequest))
+		return srv.(BookServiceServer).ServiceInsertNewBook(ctx, req.(*CreateBookRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,8 +128,8 @@ var BookService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*BookServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ServiceInserNewBook",
-			Handler:    _BookService_ServiceInserNewBook_Handler,
+			MethodName: "ServiceInsertNewBook",
+			Handler:    _BookService_ServiceInsertNewBook_Handler,
 		},
 		{
 			MethodName: "ServiceFindBookById",
