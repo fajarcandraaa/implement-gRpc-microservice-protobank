@@ -1,0 +1,80 @@
+syntax = "proto3";
+package bookservice;
+
+option go_package = "/grpc/pb";
+
+/*
+=================
+    Metadata
+=================
+*/
+message BookMeta {
+    int32 page = 1;
+    int32 per_page = 2;
+    int32 total = 3;
+  }
+
+/*
+=================
+Parameter Request
+=================
+*/
+message BookParameterRequest {
+    int32 page = 1;
+    int32 per_page = 2;
+    string order_by = 3;
+    string order_method = 4;
+    string search_condition = 5;
+    string equal = 6;
+    string not = 7;
+    string like = 8;
+    string date_range_by = 9;
+    string date_start = 10;
+    string date_end = 11;
+  }
+
+  /*
+=================
+    Response
+=================
+*/
+
+message BookResponse {
+    string id = 1;
+    string title = 2;
+    string author = 3;
+    string created_at = 4;
+    string updated_at = 5;
+}
+
+message BooksResponse {
+    repeated BookResponse data = 1;
+    BookMeta meta = 2;
+}
+
+message BookStatusResponse {
+    string status = 1;
+    string message = 2;
+}
+
+/*
+=================
+    Request
+=================
+*/
+
+message CreateBookRequest {
+    string title = 1;
+    string author = 2;
+    string created_at = 3;
+    string updated_at = 4;
+}
+
+message FindBookByIdRequest {
+    string id = 1;
+}
+
+service BookService {
+    rpc ServiceRegisterUser(CreateBookRequest) returns(BookStatusResponse);
+    rpc ServiceFindUserById(FindBookByIdRequest) returns (FindBookByIdRequest);
+}
