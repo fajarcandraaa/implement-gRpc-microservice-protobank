@@ -55,6 +55,7 @@ message BooksResponse {
 message BookStatusResponse {
     string status = 1;
     string message = 2;
+    BookResponse data = 3;
 }
 
 /*
@@ -74,5 +75,5 @@ message FindBookByIdRequest {
 
 service BookService {
     rpc ServiceRegisterUser(CreateBookRequest) returns(BookStatusResponse);
-    rpc ServiceFindUserById(FindBookByIdRequest) returns (FindBookByIdRequest);
+    rpc ServiceFindUserById(FindBookByIdRequest) returns (BookStatusResponse);
 }

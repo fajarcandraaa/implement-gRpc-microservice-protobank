@@ -57,6 +57,7 @@ message UsersResponse {
 message UserStatusResponse {
     string status = 1;
     string message = 2;
+    UserResponse data = 3;
 }
 
 /*
@@ -78,5 +79,5 @@ message FindUserByIdRequest {
 
 service UserService {
     rpc ServiceRegisterUser(CreateUserRequest) returns(UserStatusResponse);
-    rpc ServiceFindUserById(FindUserByIdRequest) returns (UserResponse);
+    rpc ServiceFindUserById(FindUserByIdRequest) returns (UserStatusResponse);
 }

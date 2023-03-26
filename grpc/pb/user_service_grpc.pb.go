@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
 	ServiceRegisterUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*UserStatusResponse, error)
-	ServiceFindUserById(ctx context.Context, in *FindUserByIdRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	ServiceFindUserById(ctx context.Context, in *FindUserByIdRequest, opts ...grpc.CallOption) (*UserStatusResponse, error)
 }
 
 type userServiceClient struct {
@@ -43,8 +43,8 @@ func (c *userServiceClient) ServiceRegisterUser(ctx context.Context, in *CreateU
 	return out, nil
 }
 
-func (c *userServiceClient) ServiceFindUserById(ctx context.Context, in *FindUserByIdRequest, opts ...grpc.CallOption) (*UserResponse, error) {
-	out := new(UserResponse)
+func (c *userServiceClient) ServiceFindUserById(ctx context.Context, in *FindUserByIdRequest, opts ...grpc.CallOption) (*UserStatusResponse, error) {
+	out := new(UserStatusResponse)
 	err := c.cc.Invoke(ctx, "/userservice.UserService/ServiceFindUserById", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (c *userServiceClient) ServiceFindUserById(ctx context.Context, in *FindUse
 // for forward compatibility
 type UserServiceServer interface {
 	ServiceRegisterUser(context.Context, *CreateUserRequest) (*UserStatusResponse, error)
-	ServiceFindUserById(context.Context, *FindUserByIdRequest) (*UserResponse, error)
+	ServiceFindUserById(context.Context, *FindUserByIdRequest) (*UserStatusResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -68,7 +68,7 @@ type UnimplementedUserServiceServer struct {
 func (UnimplementedUserServiceServer) ServiceRegisterUser(context.Context, *CreateUserRequest) (*UserStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ServiceRegisterUser not implemented")
 }
-func (UnimplementedUserServiceServer) ServiceFindUserById(context.Context, *FindUserByIdRequest) (*UserResponse, error) {
+func (UnimplementedUserServiceServer) ServiceFindUserById(context.Context, *FindUserByIdRequest) (*UserStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ServiceFindUserById not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}

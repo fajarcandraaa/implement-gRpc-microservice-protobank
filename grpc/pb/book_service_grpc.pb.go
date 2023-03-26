@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BookServiceClient interface {
 	ServiceRegisterUser(ctx context.Context, in *CreateBookRequest, opts ...grpc.CallOption) (*BookStatusResponse, error)
-	ServiceFindUserById(ctx context.Context, in *FindBookByIdRequest, opts ...grpc.CallOption) (*FindBookByIdRequest, error)
+	ServiceFindUserById(ctx context.Context, in *FindBookByIdRequest, opts ...grpc.CallOption) (*BookStatusResponse, error)
 }
 
 type bookServiceClient struct {
@@ -43,8 +43,8 @@ func (c *bookServiceClient) ServiceRegisterUser(ctx context.Context, in *CreateB
 	return out, nil
 }
 
-func (c *bookServiceClient) ServiceFindUserById(ctx context.Context, in *FindBookByIdRequest, opts ...grpc.CallOption) (*FindBookByIdRequest, error) {
-	out := new(FindBookByIdRequest)
+func (c *bookServiceClient) ServiceFindUserById(ctx context.Context, in *FindBookByIdRequest, opts ...grpc.CallOption) (*BookStatusResponse, error) {
+	out := new(BookStatusResponse)
 	err := c.cc.Invoke(ctx, "/bookservice.BookService/ServiceFindUserById", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (c *bookServiceClient) ServiceFindUserById(ctx context.Context, in *FindBoo
 // for forward compatibility
 type BookServiceServer interface {
 	ServiceRegisterUser(context.Context, *CreateBookRequest) (*BookStatusResponse, error)
-	ServiceFindUserById(context.Context, *FindBookByIdRequest) (*FindBookByIdRequest, error)
+	ServiceFindUserById(context.Context, *FindBookByIdRequest) (*BookStatusResponse, error)
 	mustEmbedUnimplementedBookServiceServer()
 }
 
@@ -68,7 +68,7 @@ type UnimplementedBookServiceServer struct {
 func (UnimplementedBookServiceServer) ServiceRegisterUser(context.Context, *CreateBookRequest) (*BookStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ServiceRegisterUser not implemented")
 }
-func (UnimplementedBookServiceServer) ServiceFindUserById(context.Context, *FindBookByIdRequest) (*FindBookByIdRequest, error) {
+func (UnimplementedBookServiceServer) ServiceFindUserById(context.Context, *FindBookByIdRequest) (*BookStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ServiceFindUserById not implemented")
 }
 func (UnimplementedBookServiceServer) mustEmbedUnimplementedBookServiceServer() {}
